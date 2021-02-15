@@ -3,10 +3,10 @@ const path = require('path');
 
 module.exports = {
   entry: {
-    tasks: './webapp/src/tasks/main.js',
-    worker: './webapp/src/worker/main.js',
-    performance: './webapp/src/performance/main.js',
-    schema: './schema/main.ts',
+    // tasks: './webapp/src/tasks/main.ts',
+    worker: './webapp/src/worker/main.ts',
+    // performance: './webapp/src/performance/main.ts',
+    // schema: './schema/main.ts',
   },
   output: {
     path: path.resolve(__dirname, 'www'),
@@ -14,15 +14,15 @@ module.exports = {
   },
   devtool: 'inline-source-map',
   devServer: {
-    contentBase: './webapp//www',
+    contentBase: './webapp/www',
     port: 7000,
   },
-  plugins: [
-    new DotenvWebpackPlugin({
-      path: './.env',
-      safe: true,
-    }),
-  ],
+  // plugins: [
+  //   new DotenvWebpackPlugin({
+  //     path: './.env',
+  //     safe: true,
+  //   }),
+  // ],
   resolve: {
     extensions: ['.js', '.ts'],
   },

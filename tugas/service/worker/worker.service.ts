@@ -1,21 +1,23 @@
-const Busboy = require('busboy');
-const url = require('url');
-const mime = require('mime-types');
-const { Writable } = require('stream');
-const {
+import * as Busboy from 'busboy';
+import * as url from 'url';
+import * as mime from 'mime-types';
+import { Writable } from 'stream';
+import { IncomingMessage, ServerResponse } from 'http';
+import {
   register,
   list,
   remove,
   info,
   ERROR_REGISTER_DATA_INVALID,
   ERROR_WORKER_NOT_FOUND,
-} = require('./worker');
-const { saveFile, readFile, ERROR_FILE_NOT_FOUND } = require('../lib/storage');
+} from './worker';
+import { saveFile, readFile, ERROR_FILE_NOT_FOUND } from '../lib/storage';
 
-function registerSvc(req, res) {
+export function registerSvc(req: IncomingMessage, res: ServerResponse): void {
   const busboy = new Busboy({ headers: req.headers });
 
   const data = {
+    id: 0,
     name: '',
     age: 0,
     bio: '',
@@ -84,7 +86,7 @@ function registerSvc(req, res) {
   req.pipe(busboy);
 }
 
-async function listSvc(req, res) {
+export async function listSvc(req: IncomingMessage, res: ServerResponse): Promise<void> {
   try {
     const workers = await list();
     res.setHeader('content-type', 'application/json');
@@ -97,9 +99,9 @@ async function listSvc(req, res) {
   }
 }
 
-async function infoSvc(req, res) {
+export async function infoSvc(req: IncomingMessage, res: ServerResponse): Promise<void> {
   const uri = url.parse(req.url, true);
-  const id = uri.query['id'];
+  const id = uri.query['id'] as string;
   if (!id) {
     res.statusCode = 401;
     res.write('parameter id tidak ditemukan');
@@ -107,7 +109,7 @@ async function infoSvc(req, res) {
     return;
   }
   try {
-    const worker = await info(id);
+    const worker = await info(parseInt(id,10));
     res.setHeader('content-type', 'application/json');
     res.write(JSON.stringify(worker));
     res.end();
@@ -124,9 +126,9 @@ async function infoSvc(req, res) {
   }
 }
 
-async function removeSvc(req, res) {
+export async function removeSvc(req: IncomingMessage, res: ServerResponse): Promise<void> {
   const uri = url.parse(req.url, true);
-  const id = uri.query['id'];
+  const id = uri.query['id'] as string;
   if (!id) {
     res.statusCode = 401;
     res.write('parameter id tidak ditemukan');
@@ -134,7 +136,7 @@ async function removeSvc(req, res) {
     return;
   }
   try {
-    const worker = await remove(id);
+    const worker = await remove(parseInt(id,10));
     res.setHeader('content-type', 'application/json');
     res.statusCode = 200;
     res.write(JSON.stringify(worker));
@@ -152,7 +154,7 @@ async function removeSvc(req, res) {
   }
 }
 
-async function getPhotoSvc(req, res) {
+export async function getPhotoSvc(req: IncomingMessage, res: ServerResponse): Promise<void> {
   const uri = url.parse(req.url, true);
   const objectName = uri.pathname.replace('/photo/', '');
   if (!objectName) {
@@ -161,8 +163,11 @@ async function getPhotoSvc(req, res) {
     res.end();
   }
   try {
+    const mimeType = mime.lookup(objectName);
+    if(mimeType) {
+      res.setHeader('Content-Type', mimeType);
+    }
     const objectRead = await readFile(objectName);
-    res.setHeader('Content-Type', mime.lookup(objectName));
     res.statusCode = 200;
     objectRead.pipe(res);
   } catch (err) {
@@ -178,11 +183,3 @@ async function getPhotoSvc(req, res) {
     return;
   }
 }
-
-module.exports = {
-  listSvc,
-  registerSvc,
-  infoSvc,
-  removeSvc,
-  getPhotoSvc,
-};
