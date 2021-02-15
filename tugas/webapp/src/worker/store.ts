@@ -1,8 +1,4 @@
-import {
-  createAction,
-  createReducer,
-  configureStore,
-} from '@reduxjs/toolkit';
+import { createAction, createReducer, configureStore } from '@reduxjs/toolkit';
 import {
   WorkerInterface,
   initialState,
@@ -21,24 +17,30 @@ enum ActionType {
   REGISTERED = 'registered',
   REMOVED = 'removed',
   WORKER_LOADED = 'workersLoaded',
-  CLEAR_ERROR = 'clearError'
+  CLEAR_ERROR = 'clearError',
 }
 
-
-export const errorAction = createAction<WorkerInterface>(ActionType.ERROR);
-export const loadingAction = createAction<WorkerInterface>(ActionType.LOADING);
-export const registeredAction = createAction<WorkerInterface>(ActionType.REGISTERED);
-export const removedAction = createAction<WorkerInterface>(ActionType.REMOVED);
-export const workersLoadedAction = createAction<WorkerInterface>(ActionType.WORKER_LOADED);
-export const clearErrorAction = createAction<WorkerInterface>(ActionType.CLEAR_ERROR);
+export const errorAction = createAction<string>(ActionType.ERROR);
+export const loadingAction = createAction(ActionType.LOADING);
+export const registeredAction = createAction<{
+  id: number;
+  name: string;
+  photo: string;
+  bio: string;
+}>(ActionType.REGISTERED);
+export const removedAction = createAction<number>(ActionType.REMOVED);
+export const workersLoadedAction = createAction<
+  { id: number; name: string; photo: string; bio: string }[]
+>(ActionType.WORKER_LOADED);
+export const clearErrorAction = createAction(ActionType.CLEAR_ERROR);
 
 const reducer = createReducer(initialState, {
   [ActionType.ERROR]: error,
-  [ActionType.LOADING]: clearError,
-  [ActionType.REGISTERED]: loading,
-  [ActionType.REMOVED]: registered,
-  [ActionType.WORKER_LOADED]: removed,
-  [ActionType.CLEAR_ERROR]: workersLoaded,
+  [ActionType.LOADING]: loading,
+  [ActionType.REGISTERED]: registered,
+  [ActionType.REMOVED]: removed,
+  [ActionType.WORKER_LOADED]: workersLoaded,
+  [ActionType.CLEAR_ERROR]: clearError,
 });
 
 export const store$ = configureStore({
