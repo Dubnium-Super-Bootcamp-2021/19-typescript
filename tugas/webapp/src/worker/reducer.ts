@@ -3,7 +3,7 @@ import { SERVICE_BASEURL } from './config';
 export interface WorkerInterface {
   loading: boolean;
   error: string | null;
-  workers: { id: number; name: string; photo: string; bio: string }[];
+  workers: { id: number; name: string; photo: any; bio: string }[];
 }
 
 interface ActionObjectError extends WorkerInterface {

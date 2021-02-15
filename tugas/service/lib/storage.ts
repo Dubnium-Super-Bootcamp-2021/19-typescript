@@ -1,4 +1,4 @@
-import mime from 'mime-types';
+import * as mime from 'mime-types';
 import { Client } from 'minio';
 
 export const ERROR_REQUIRE_OBJECT_NAME = 'error wajib memasukan nama objek';
@@ -47,7 +47,7 @@ export function randomFileName(mimetype: any): string {
  * @param file 
  * @param mimetype 
  */
-export function saveFile(file: any, mimetype: any): Promise<unknown> {
+export function saveFile(file: any, mimetype: any): Promise<any> {
   const objectName = randomFileName(mimetype);
   return new Promise((resolve, reject) => {
     client.putObject(bucketname, objectName, file, (err) => {

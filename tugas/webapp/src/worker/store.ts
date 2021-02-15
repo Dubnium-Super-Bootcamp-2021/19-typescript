@@ -25,12 +25,12 @@ export const loadingAction = createAction(ActionType.LOADING);
 export const registeredAction = createAction<{
   id: number;
   name: string;
-  photo: string;
+  photo: any;
   bio: string;
 }>(ActionType.REGISTERED);
 export const removedAction = createAction<number>(ActionType.REMOVED);
 export const workersLoadedAction = createAction<
-  { id: number; name: string; photo: string; bio: string }[]
+  { id: number; name: string; photo: any; bio: string }[]
 >(ActionType.WORKER_LOADED);
 export const clearErrorAction = createAction(ActionType.CLEAR_ERROR);
 

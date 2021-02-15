@@ -9,7 +9,7 @@ import * as workerSvc from './worker.client';
 
 export const register = (data: {
   name: string;
-  photo: string;
+  photo: any;
   age: number;
   bio: string;
   address: string;
