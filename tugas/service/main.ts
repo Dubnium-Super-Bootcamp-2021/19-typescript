@@ -12,14 +12,7 @@ import { config } from './config';
 async function init() {
   try {
     console.log('connect to database');
-    await orm.connect([WorkerSchema, TaskSchema], {
-      type: config.database.type,
-      host: config.database.host,
-      port: config.database.port,
-      username: config.database.username,
-      password: config.database.password,
-      database: config.database.database,
-    });
+    await orm.connect([WorkerSchema, TaskSchema], config.database);
     console.log('database connected');
   } catch (err) {
     console.error('database connection failed');
