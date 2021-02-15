@@ -34,7 +34,7 @@ export const workersLoadedAction = createAction<
 >(ActionType.WORKER_LOADED);
 export const clearErrorAction = createAction(ActionType.CLEAR_ERROR);
 
-const reducer = createReducer(initialState, {
+const workerReducer = createReducer(initialState, {
   [ActionType.ERROR]: error,
   [ActionType.LOADING]: loading,
   [ActionType.REGISTERED]: registered,
@@ -44,6 +44,6 @@ const reducer = createReducer(initialState, {
 });
 
 export const store$ = configureStore({
-  reducer,
+  reducer: workerReducer,
   middleware: [thunkMiddleware],
 });

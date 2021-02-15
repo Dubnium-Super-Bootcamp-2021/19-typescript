@@ -1,6 +1,14 @@
 {
+<<<<<<< HEAD
     "ignore": ["**/*.test.ts", "**/*.spec.ts", "node_modules"],
     "watch": ["service"],
     "exec": "npm run service",
     "ext": "ts"
   }
+=======
+  "ignore": ["**/*.test.ts", "**/*.spec.ts", "node_modules"],
+  "watch": ["service"],
+  "exec": "npm run service",
+  "ext": "ts"
+}
+>>>>>>> 1871d137cf970542133d1aa8a3bba860746a3b58

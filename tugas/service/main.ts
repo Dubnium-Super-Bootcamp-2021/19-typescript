@@ -9,7 +9,10 @@ import * as tasksServer from './tasks/server';
 import * as performanceServer from './performance/server';
 import { config } from './config';
 
-async function init() {
+/**
+ * ### Inisialisasi koneksi database
+ */
+async function init(): Promise<void> {
   try {
     console.log('connect to database');
     await orm.connect([WorkerSchema, TaskSchema], config.database);
@@ -55,7 +58,7 @@ async function onStop() {
   kv.close();
 }
 
-async function main(command) {
+async function main(command): Promise<void> {
   switch (command) {
     case 'performance':
       await init();

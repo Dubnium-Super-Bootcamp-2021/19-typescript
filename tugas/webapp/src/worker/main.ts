@@ -17,11 +17,11 @@ form.onsubmit = (event) => {
   event.preventDefault();
   store$.dispatch(clearErrorAction());
   if (
-    !name.value ||
-    !age.value ||
-    !photo.files[0] ||
-    !bio.value ||
-    !address.value
+    !name.nodeValue ||
+    !age.nodeValue ||
+    !photo.nodeValue[0] ||
+    !bio.nodeValue ||
+    !address.nodeValue
   ) {
     store$.dispatch(errorAction('form isian tidak lengkap!'));
     return;

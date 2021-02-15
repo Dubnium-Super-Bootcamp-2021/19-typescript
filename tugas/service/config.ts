@@ -40,4 +40,8 @@ const defaultConfig: ServiceConfig = {
   },
 };
 
+<<<<<<< HEAD
 export const config: ServiceConfig = rc('tm', defaultConfig);
+=======
+export const config: ServiceConfig = rc('tm', defaultConfig);
+>>>>>>> 1871d137cf970542133d1aa8a3bba860746a3b58

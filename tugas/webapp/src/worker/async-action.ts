@@ -5,9 +5,15 @@ import {
   removedAction,
   workersLoadedAction,
 } from './store';
-import * as workerSvc from'./worker.client';
+import * as workerSvc from './worker.client';
 
-export const register = (data) => async (dispatch) => {
+export const register = (data: {
+  name: string;
+  photo: string;
+  age: number;
+  bio: string;
+  address: string;
+}) => async (dispatch) => {
   dispatch(loadingAction());
   try {
     const worker = await workerSvc.register(data);
