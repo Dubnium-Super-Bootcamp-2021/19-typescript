@@ -1,24 +1,21 @@
-const orm = require('./lib/orm');
-const storage = require('./lib/storage');
-const kv = require('./lib/kv');
-const bus = require('./lib/bus');
-const { TaskSchema } = require('./tasks/task.model');
-const { WorkerSchema } = require('./worker/worker.model');
-const workerServer = require('./worker/server');
-const tasksServer = require('./tasks/server');
-const performanceServer = require('./performance/server');
+import * as orm from './lib/orm';
+import * as storage from './lib/storage';
+import * as kv from './lib/kv';
+import * as bus from './lib/bus';
+import { TaskSchema } from './tasks/task.model';
+import { WorkerSchema } from './worker/worker.model';
+import * as workerServer from './worker/server';
+import * as tasksServer from './tasks/server';
+import * as performanceServer from './performance/server';
+import { config } from './config';
 
-async function init() {
+/**
+ * ### Inisialisasi koneksi database
+ */
+async function init(): Promise<void> {
   try {
     console.log('connect to database');
-    await orm.connect([WorkerSchema, TaskSchema], {
-      type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: 'postgres',
-      database: 'sanbercode2',
-    });
+    await orm.connect([WorkerSchema, TaskSchema], config.database);
     console.log('database connected');
   } catch (err) {
     console.error('database connection failed');
@@ -27,11 +24,11 @@ async function init() {
   try {
     console.log('connect to object storage');
     await storage.connect('task-manager', {
-      endPoint: '127.0.0.1',
-      port: 9000,
-      useSSL: false,
-      accessKey: 'local-minio',
-      secretKey: 'local-test-secret',
+      endPoint: config.objectStorage.endPoint,
+      port: config.objectStorage.port,
+      useSSL: config.objectStorage.useSSL,
+      accessKey: config.objectStorage.accessKey,
+      secretKey: config.objectStorage.secretKey,
     });
     console.log('object storage connected');
   } catch (err) {
@@ -61,7 +58,7 @@ async function onStop() {
   kv.close();
 }
 
-async function main(command) {
+async function main(command): Promise<void> {
   switch (command) {
     case 'performance':
       await init();
