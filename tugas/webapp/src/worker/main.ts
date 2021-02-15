@@ -1,14 +1,14 @@
-const { register, getList, remove } = require('./async-action');
-const { store$, errorAction, clearErrorAction } = require('./store');
+import { register, getList, remove } from './async-action';
+import { store$, errorAction, clearErrorAction } from './store';
 
-require('./main.css');
+import './main.css';
 
-const form = document.getElementById('form');
-const name = document.getElementById('name');
-const age = document.getElementById('age');
-const photo = document.getElementById('photo');
-const bio = document.getElementById('bio');
-const address = document.getElementById('address');
+const form = <HTMLFormElement>document.getElementById('form');
+const name = <HTMLInputElement>document.getElementById('name');
+const age = <HTMLInputElement>document.getElementById('age');
+const photo = <HTMLInputElement>document.getElementById('photo');
+const bio = <HTMLInputElement>document.getElementById('bio');
+const address = <HTMLInputElement>document.getElementById('address');
 const list = document.getElementById('list');
 const errorTxt = document.getElementById('error-text');
 const loadingTxt = document.getElementById('loading-text');
@@ -23,16 +23,16 @@ form.onsubmit = (event) => {
     !bio.value ||
     !address.value
   ) {
-    store$.dispatch(errorAction('form isian tidak lengkap!'));
+    store$.dispatch<any>(errorAction('form isian tidak lengkap!'));
     return;
   }
 
   // register user
-  store$.dispatch(
+  store$.dispatch<any>(
     register({
       name: name.value,
       photo: photo.files[0],
-      age: age.value,
+      age: parseInt(age.value, 10),
       bio: bio.value,
       address: address.value,
     })
@@ -50,7 +50,7 @@ store$.subscribe(() => {
 const state = store$.getState();
 render(state);
 
-store$.dispatch(getList);
+store$.dispatch<any>(getList);
 
 function render(state) {
   // render error
@@ -60,9 +60,9 @@ function render(state) {
     errorTxt.textContent = '';
   }
   if (state.loading) {
-    loadingTxt.style = '';
+    loadingTxt.style.removeProperty('display');
   } else {
-    loadingTxt.style = 'display:none;';
+    loadingTxt.style.display = 'none';
   }
 
   // render list of worker
@@ -73,7 +73,7 @@ function render(state) {
     const rmvBtn = document.createElement('button');
     rmvBtn.innerText = 'hapus';
     rmvBtn.onclick = function () {
-      store$.dispatch(remove(worker.id));
+      store$.dispatch<any>(remove(worker.id));
     };
     li.innerHTML = `
       <img src="${worker.photo}" alt="" width="30px" height="30px" />

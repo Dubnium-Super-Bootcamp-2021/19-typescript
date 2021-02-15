@@ -1,5 +1,5 @@
-const { summary } = require('./async-action');
-const { store$ } = require('./store');
+import { summary } from './async-action';
+import { store$ } from './store';
 
 require('./main.css');
 
@@ -19,10 +19,10 @@ store$.subscribe(() => {
 const state = store$.getState();
 render(state);
 
-store$.dispatch(summary);
+store$.dispatch<any>(summary);
 
 refresh.onclick = () => {
-  store$.dispatch(summary);
+  store$.dispatch<any>(summary);
 };
 
 function render(state) {
@@ -33,14 +33,16 @@ function render(state) {
     errorTxt.textContent = '';
   }
   if (state.loading) {
-    loadingTxt.style = '';
+    loadingTxt.style.removeProperty('display');
   } else {
-    loadingTxt.style = 'display:none;';
+    loadingTxt.style.display = 'none';
   }
 
   // render list of worker
-  workers.innerText = state.summary.total_worker.toString();
-  tasks.innerText = state.summary.total_task.toString();
-  done.innerText = state.summary.task_done.toString();
-  canceled.innerText = state.summary.task_cancelled.toString();
+  if(workers && tasks && done && canceled){
+    workers.innerText = state.summary.total_worker.toString();
+    tasks.innerText = state.summary.total_task.toString();
+    done.innerText = state.summary.task_done.toString();
+    canceled.innerText = state.summary.task_cancelled.toString();
+  }
 }
