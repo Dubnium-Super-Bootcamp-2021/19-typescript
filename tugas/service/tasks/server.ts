@@ -1,17 +1,17 @@
-const { createServer } = require('http');
-const url = require('url');
-const { stdout } = require('process');
-const {
+import { createServer, Server } from 'http';
+import * as url from 'url';
+import { stdout } from 'process';
+import {
   addSvc,
   cancelSvc,
   doneSvc,
   listSvc,
   getAttachmentSvc,
-} = require('./task.service');
+} from './task.service';
 
-let server;
+let server: Server;
 
-function run(callback) {
+export function run(callback) {
   server = createServer((req, res) => {
     // cors
     const aborted = cors(req, res);
@@ -32,35 +32,35 @@ function run(callback) {
           if (req.method === 'POST') {
             return addSvc(req, res);
           } else {
-            respond(404);
+            respond(404, 'tidak ditemukan');
           }
           break;
         case '/list':
           if (req.method === 'GET') {
             return listSvc(req, res);
           } else {
-            respond(404);
+            respond(404, 'tidak ditemukan');
           }
           break;
         case '/done':
           if (req.method === 'PUT') {
             return doneSvc(req, res);
           } else {
-            respond(404);
+            respond(404, 'tidak ditemukan');
           }
           break;
         case '/cancel':
           if (req.method === 'PUT') {
             return cancelSvc(req, res);
           } else {
-            respond(404);
+            respond(404, 'tidak ditemukan');
           }
           break;
         default:
           if (/^\/attachment\/\w+/.test(uri.pathname)) {
             return getAttachmentSvc(req, res);
           }
-          respond(404);
+          respond(404, 'tidak ditemukan');
       }
     } catch (err) {
       respond(500, 'unkown server error');
@@ -81,7 +81,7 @@ function run(callback) {
   });
 }
 
-function cors(req, res) {
+export function cors(req, res) {
   // handle preflight request
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Request-Method', '*');
@@ -98,14 +98,8 @@ function cors(req, res) {
   }
 }
 
-function stop() {
+export function stop() {
   if (server) {
     server.close();
   }
 }
-
-module.exports = {
-  run,
-  stop,
-  cors,
-};
